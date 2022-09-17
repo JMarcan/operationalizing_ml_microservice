@@ -10,6 +10,7 @@ COPY app.py .
 
 ## Step 3:
 # Install packages from requirements.txt
+COPY requirements.txt .
 RUN pip install -r requirements.txt --no-cache-dir
 # hadolint ignore=DL3013
 
