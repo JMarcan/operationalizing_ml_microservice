@@ -7,6 +7,7 @@ WORKDIR /app
 ## Step 2:
 # Copy source code to working directory
 COPY app.py .
+COPY model_data/boston_housing_prediction.joblib ./model_data/boston_housing_prediction.joblib
 
 ## Step 3:
 # Install packages from requirements.txt
