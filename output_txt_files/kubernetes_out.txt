@@ -1,1 +1,15 @@
-<paste log output from Kubernetes-mediated prediction, here>
+jan@ZM-Virtual-DEV:~/Documents/git-repos/operationalizing_ml_microservice$ kubectl get pods
+NAME         READY   STATUS    RESTARTS   AGE
+sklearnapp   1/1     Running   0          4m41s
+jan@ZM-Virtual-DEV:~/Documents/git-repos/operationalizing_ml_microservice$ kubectl port-forward sklearnapp 8000:80
+Forwarding from 127.0.0.1:8000 -> 80
+Forwarding from [::1]:8000 -> 80
+Handling connection for 8000
+
+jan@ZM-Virtual-DEV:~/Documents/git-repos/operationalizing_ml_microservice$ ./make_prediction.sh
+Port: 8000
+{
+  "prediction": [
+    20.35373177134412
+  ]
+}
