@@ -23,6 +23,7 @@ such as average rooms in a home and data about highway access, and so on.
 ![predicting_housing_prices](assets/ml_predicting_housing_prices.png)
 
 ## Running the app
+The following steps describes how to run the app on linux.
 
 ### Setting up the environment
 1. Create a python virtual environment and activate it
@@ -58,4 +59,5 @@ as indicated by STATUS: ContainerCreating, but you just have to wait a few minut
 then you can run the script again.<br><br>
 You can check on your pod’s status with a call to `kubectl get pod`<br> 
 and you should see the status change to Running. Then you can run again `./run_kubernetes.sh`.<br><br>
-Verify its proper deployment by running `/.make_prediction` from separate command line.
+Verify its proper deployment by running `/.make_prediction` from separate command line.<br>
+![prediction_output](assets/prediction_output.png)
