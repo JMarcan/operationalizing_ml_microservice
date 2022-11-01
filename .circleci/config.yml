@@ -17,8 +17,6 @@ jobs:
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
       - run:
           name: install dependencies
           command: |
@@ -60,6 +58,7 @@ jobs:
           name: run lint
           command: |
             . venv/bin/activate
+            sudo make install-hadolint
             make lint
 
   dockerize-and-publish:
@@ -75,6 +74,9 @@ jobs:
       - attach_workspace:
           at: .
 
+      - setup_remote_docker:
+          version: 20.10.14
+
       # Build and publish docker image    
       - run:
           name: publish-docker
@@ -82,7 +84,7 @@ jobs:
             . venv/bin/activate
             docker login --username $dockerhub_username --password $dockerhub_password
             docker build -t $image_name:latest .
-            docker tag $image_name $dockerhub_username/$imageName
+            docker tag $image_name:latest $dockerhub_username/$image_name
             docker push $dockerhub_username/$image_name
 
 workflows:
