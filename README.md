@@ -2,30 +2,43 @@
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/JMarcan/operationalizing_ml_microservice/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/JMarcan/operationalizing_ml_microservice/tree/main)
 
-## Project summary
-In this project
-the goal was to to operationalize a machine learning microservice for production<br>
-with kubernetes which is an open-source system for automating the management of containerized applications.
-
-Specifically by:
-- Integrating static code analysis, linting
-- Integrating linting into CI pipeline with CircleCI
-- Dockerizing the application
-- Deploying dockerized application and making prediction
-- Improving the logging of the applications
-- Configuring Kubernetes and creating a Kubernetes cluster
-- Deploying dockerized app using Kubernetes and making prediction
+# Project summary
+The goal of the project was to to operationalize a machine learning microservice for production.<br>
+For that, I provisioned the automated pipeline where:
+- CI pipeline executes static code analysis, linting, testing, and dockerization
+- CD pipeline executes blue-green deployment into AWS EKS Kubernetes Service via Terraform.
 
 The machine learning app itself is pretrained model<br> 
 predicting housing prices in Boston based on certain input features<br>
 such as average rooms in a home and data about highway access, and so on.
-
 ![predicting_housing_prices](assets/ml_predicting_housing_prices.png)
 
-## Running the app
+## Prerequisites
+The setup has the following prerequisites:
+- CircleCI account integrated with the code repository
+- DockerHub account, with repository name configured configured in CircleCI environment variables 
+- AWS account and corresponding IAM user with deployment rights, with secret keys configured in CircleCI environment variables 
+- S3 bucket to keep the terraform state, configured in 'config/dev_backend.tfvars'
+- DynamoDB table to keep the terraform lock, configured in 'config/dev_backend.tfvars'
+
+## Pipeline screens
+
+![cicd_pipeline](assets/CICD_Pipeline.png)
+
+![tests_run](assets/tests_run.png)
+
+![publish_docker](assets/tests_run.png)
+
+![terraform_infra_plan](assets/terraform_infra_plan.png)
+
+![aws_eks_cluster](assets/aws_eks_cluster.png)
+
+![homepage](assets/app_webpage.png)
+
+# Running the app locally on linux
 The following steps describes how to run the app on linux.
 
-### Setting up the environment
+## Setting up the environment
 1. Create a python virtual environment and activate it
 - `python3 -m venv ~/.ml_microservice_env`
 - `source ~/.ml_microservice_env/bin/activate`
@@ -41,7 +54,7 @@ by checking the version of the libary
 - `kubectl version`
 
 
-### Running the app
+## Running the app
 
 1. Build and start docker container: 
 Run `./run_docker.sh`<br>

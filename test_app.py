@@ -1,7 +1,7 @@
 import unittest
 from app import app
 
-class bla(unittest.TestCase):
+class TestClass(unittest.TestCase):
     def test_homepage_access(self):
         with app.test_client() as client:
             res = client.get("/")

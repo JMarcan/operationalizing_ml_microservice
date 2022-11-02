@@ -16,7 +16,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
+          - v2-dependencies-{{ checksum "requirements.txt" }}
       - run:
           name: install dependencies
           command: |
@@ -26,7 +26,7 @@ jobs:
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+          key: v2-dependencies-{{ checksum "requirements.txt" }}
 
       # pass installed python environment to another jobs
       - persist_to_workspace:
@@ -87,6 +87,95 @@ jobs:
             docker tag $image_name:latest $dockerhub_username/$image_name
             docker push $dockerhub_username/$image_name
 
+  infra-validate:
+    docker:
+      - image: hashicorp/terraform:1.3.3
+
+    working_directory: ~/project
+
+    steps: 
+      - checkout
+
+
+      - run:
+          name: infra-validate
+          command: |
+            cd terraform
+            echo "Terraform validating infrastructure deployment into the dev environment"
+            terraform init -backend-config=config/dev_backend.tfvars
+            terraform validate
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  infra-plan:
+    docker:
+      - image: hashicorp/terraform:1.3.3
+
+    working_directory: ~/project
+
+    steps: 
+      - checkout
+
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: infra-plan
+          command: |
+            cd terraform
+            echo "Terraform planning infrastructure deployment into the dev environment"
+            terraform plan -var-file=config/dev.tfvars -out=tfplan.json    
+            terraform show --json tfplan.json
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - terraform
+
+  infra-apply:
+    docker:
+      - image: hashicorp/terraform:1.3.3
+
+    working_directory: ~/project
+
+    steps: 
+      - checkout
+
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: infra-apply
+          command: |
+            cd terraform
+            echo "Terraform applying infrastructure deployment into the dev environment"
+            terraform apply tfplan.json       
+            terraform output -json   
+
+  infra-destroy:
+    docker:
+      - image: hashicorp/terraform:1.3.3
+
+    working_directory: ~/project
+
+    steps: 
+      - checkout
+
+      - attach_workspace:
+          at: .
+
+      - run:
+          name: infra-destroy
+          command: |
+            cd terraform
+            echo "Terraform destroying infrastructure deployment in dev environment"
+            terraform destroy
+            terraform output -json   
+
+
 workflows:
   version: 2
   build:
@@ -99,3 +188,24 @@ workflows:
             requires:
             - test
             context: dockerhub-credentials
+        - infra-validate:
+            requires:
+            - dockerize-and-publish
+        - infra-plan:
+            requires:
+            - infra-validate
+        - apply-approve:
+            type: approval
+            requires:
+            - infra-plan
+        - infra-apply:
+            requires:
+            - apply-approve
+
+        - destroy-approve:
+            type: approval
+            requires:
+            - infra-apply
+        - infra-destroy:
+            requires:
+            - destroy-approve
