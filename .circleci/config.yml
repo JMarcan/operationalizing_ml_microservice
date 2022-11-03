@@ -172,7 +172,7 @@ jobs:
           command: |
             cd terraform
             echo "Terraform destroying infrastructure deployment in dev environment"
-            terraform destroy
+            terraform destroy -var-file=config/dev.tfvars -auto-approve
             terraform output -json   
 
 
