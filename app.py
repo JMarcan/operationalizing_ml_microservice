@@ -10,6 +10,9 @@ app = Flask(__name__)
 LOG = create_logger(app)
 LOG.setLevel(logging.INFO)
 
+def AddHorrible____function___0335_MAKING_lint_FAIL():
+    return 0
+
 def scale(payload):
     """Scales Payload"""
     

@@ -27,6 +27,6 @@ lint:
 	hadolint Dockerfile
 
 	# Linter for Python code
-	pylint --disable=R,C,W1203,W1202 app.py
+	pylint app.py
 
 all: install install-hadolint lint test
