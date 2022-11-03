@@ -23,17 +23,30 @@ The setup has the following prerequisites:
 
 ## Pipeline screens
 
+CICD pipeline:
 ![cicd_pipeline](assets/CICD_Pipeline.png)
 
+Sucessful tests run:
 ![tests_run](assets/tests_run.png)
 
+Failed tests run and pipeline:
+![tests_failed_lint_pipeline](assets/tests_failed_lint_pipeline.png)
+
+![tests_failed_lint](assets/tests_failed_lint.png)
+
+Publish docker step:
 ![publish_docker](assets/tests_run.png)
 
+Infrastructure deployment:
 ![terraform_infra_plan](assets/terraform_infra_plan.png)
 
 ![aws_eks_cluster](assets/aws_eks_cluster.png)
 
 ![homepage](assets/app_webpage.png)
+
+Deployed blue-green instances
+![homepage](assets/deployed_ec2_instances.png)
+
 
 # Running the app locally on linux
 The following steps describes how to run the app on linux.
